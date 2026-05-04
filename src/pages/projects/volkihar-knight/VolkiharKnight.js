@@ -9,6 +9,8 @@ import volkiharSlide1 from './assets/volkihar-slide-1.jpg';
 import volkiharSlide2 from './assets/volkihar-slide-2.jpg';
 import volkiharSlide3 from './assets/volkihar-slide-3.jpg';
 import volkiharSlidePlaceholder from './assets/volkihar-slide-placeholder.jpg';
+import volkiharEnderalLogoLarge from './assets/volkihar-enderal-logo-large.png';
+import volkiharEnderalLogoPlaceholder from './assets/volkihar-enderal-logo-placeholder.png';
 import { Button } from 'components/Button';
 import { Footer } from 'components/Footer';
 import { Image } from 'components/Image';
