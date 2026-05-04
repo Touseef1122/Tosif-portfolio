@@ -1,6 +1,7 @@
 import volkiharBackground from './assets/volkihar-background.jpg';
 import volkiharBanner from './assets/volkihar-banner.jpg';
 import volkiharBook from './assets/volkihar-book.png';
+import volkiharEnderalLogo from './assets/volkihar-enderal-logo.png';
 import volkiharEnderalLogoLarge from './assets/volkihar-enderal-logo-large.png';
 import volkiharEnderal from './assets/volkihar-enderal.jpg';
 import VolkiharKnightLogo from './assets/volkihar-logo.svg';
