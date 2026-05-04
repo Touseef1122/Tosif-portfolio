@@ -1,0 +1,58 @@
+.testimonialsContainer {
+  overflow: hidden;
+  width: 100%;
+}
+
+.testimonials {
+  display: flex;
+  gap: var(--spaceL);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: var(--spaceL) 0;
+}
+
+.testimonials::-webkit-scrollbar {
+  display: none;
+}
+
+.testimonial {
+  flex: 0 0 300px;
+  padding: var(--spaceL);
+  border: 1px solid var(--colorBorder);
+  border-radius: var(--borderRadius);
+  background: var(--colorBackground);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.testimonial:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: var(--spaceM);
+  border: 2px solid var(--colorAccent);
+}
+
+.comment {
+  font-style: italic;
+  margin-bottom: var(--spaceM);
+  flex-grow: 1;
+}
+
+.name {
+  font-weight: var(--fontWeightMedium);
+  margin-bottom: var(--spaceS);
+}
+
+.role {
+  font-size: var(--fontSizeS);
+  color: var(--colorTextSecondary);
+}

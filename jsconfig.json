@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "module": "commonjs",
+    "ignoreDeprecations": "6.0"
+  },
+  "include": ["src", ".storybook/StoryContainer.js"]
+}
