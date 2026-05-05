@@ -1,4 +1,3 @@
-import emailjs from '@emailjs/browser';
 import { Button } from 'components/Button';
 import { DecoderText } from 'components/DecoderText';
 import { Divider } from 'components/Divider';
@@ -35,17 +34,25 @@ export const Contact = () => {
       setSending(true);
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
-      await emailjs.send(
-          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-          { 
-            name: email.value, 
-            email: email.value, 
-            message: message.value,
-            title: 'Portfolio Contact Form'
-          },
-          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-        );
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              service_id: 'service_0fplvzd',
+              template_id: 'template_u62diup',
+              user_id: 'KVi8kSOugSdOnI967',
+              template_params: {
+                name: email.value,
+                email: email.value,
+                message: message.value,
+                title: 'Portfolio Contact Form',
+              },
+            }),
+          });
+
+          if (!response.ok) throw new Error('Failed to send message');
 
           setComplete(true);
           setSending(false);
