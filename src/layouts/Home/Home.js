@@ -117,7 +117,8 @@ export const Home = () => {
         title="Ehr Reviews"
         description="A legacy project that I modernized. I refactored and cleaned the existing codebase, updated the user interface, and created new APIs to improve functionality and performance."
         buttonText="View project"
-        buttonLink="https://github.com/Touseef1122/LawMinder"
+        buttonLink="import volkiharEnderalLogo from './assets/volkihar-enderal-logo.png';
+https://www.ehrreviews.com/"
         model={{
           type: 'laptop',
           alt: 'LawMinder legal management platform',
