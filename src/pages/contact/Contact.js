@@ -35,32 +35,37 @@ export const Contact = () => {
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
       const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            service_id: 'service_0fplvzd',
+            template_id: 'template_u62diup',
+            user_id: 'KVi8kSOugSdOnI967',
+            template_params: {
+              name: email.value,
+              email: email.value,
+              message: message.value,
+              title: 'Portfolio Contact Form',
             },
-            body: JSON.stringify({
-              service_id: 'service_0fplvzd',
-              template_id: 'template_u62diup',
-              user_id: 'KVi8kSOugSdOnI967',
-              template_params: {
-                name: email.value,
-                email: email.value,
-                message: message.value,
-                title: 'Portfolio Contact Form',
-              },
-            }),
-          });
+          }),
+        });
 
-          if (!response.ok) throw new Error('Failed to send message');
+        const responseText = await response.text();
+        console.log('EmailJS response:', responseText);
 
-          setComplete(true);
-          setSending(false);
-        } catch (error) {
-          setSending(false);
-          setStatusError(error.message);
-        }
-      };
+        if (!response.ok) throw new Error(responseText);
+
+            if (!response.ok) throw new Error('Failed to send message');
+
+            setComplete(true);
+            setSending(false);
+          } catch (error) {
+            setSending(false);
+            setStatusError(error.message);
+          }
+        };
 
   return (
     <Section className={styles.contact}>
