@@ -38,7 +38,12 @@ export const Contact = () => {
       await emailjs.send(
           process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
           process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-          { email: email.value, message: message.value },
+          { 
+            name: email.value, 
+            email: email.value, 
+            message: message.value,
+            title: 'Portfolio Contact Form'
+          },
           process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
         );
 
