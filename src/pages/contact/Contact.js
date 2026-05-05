@@ -1,3 +1,4 @@
+import emailjs from '@emailjs/browser';
 import { Button } from 'components/Button';
 import { DecoderText } from 'components/DecoderText';
 import { Divider } from 'components/Divider';
@@ -34,34 +35,20 @@ export const Contact = () => {
       setSending(true);
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
-      const response = await fetch(`${apiUrl}/message`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.value,
-          message: message.value,
-        }),
-      });
+      await emailjs.send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+          { email: email.value, message: message.value },
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        );
 
-      const responseMessage = await response.json();
-
-      const statusError = getStatusError({
-        status: response?.status,
-        errorMessage: responseMessage?.error,
-        fallback: 'There was a problem sending your message',
-      });
-
-      if (statusError) throw new Error(statusError);
-
-      setComplete(true);
-      setSending(false);
-    } catch (error) {
-      setSending(false);
-      setStatusError(error.message);
-    }
-  };
+          setComplete(true);
+          setSending(false);
+        } catch (error) {
+          setSending(false);
+          setStatusError(error.message);
+        }
+      };
 
   return (
     <Section className={styles.contact}>

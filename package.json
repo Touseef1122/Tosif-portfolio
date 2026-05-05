@@ -37,6 +37,7 @@
     "stylelint-config-standard": "^26.0.0"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "fathom-client": "^3.5.0",
     "framer-motion": "^7.1.0",
     "mdx-bundler": "^10.1.1",
@@ -49,7 +50,7 @@
   },
   "scripts": {
     "dev": "next dev",
-     "build": "next build",
+    "build": "next build",
     "build:storybook": "build-storybook -o build-storybook && node scripts/draco-storybook",
     "deploy": "aws s3 sync --delete build/ s3://hamish-portfolio-site",
     "deploy:storybook": "aws s3 sync --delete build-storybook s3://hamish-portfolio-storybook",
