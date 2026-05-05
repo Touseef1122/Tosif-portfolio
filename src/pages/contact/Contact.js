@@ -40,7 +40,7 @@ export const Contact = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            service_id: 'service_0fplvzd',
+            service_id: 'service_b2dmj5t',
             template_id: 'template_u62diup',
             user_id: 'KVi8kSOugSdOnI967',
             template_params: {
