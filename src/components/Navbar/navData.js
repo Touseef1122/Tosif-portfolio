@@ -15,6 +15,10 @@ export const navLinks = [
     label: 'Contact',
     pathname: '/contact',
   },
+    {
+    label: 'CV',
+    pathname: '/touseef_shahbaz_cv.pdf',
+  },
 ];
 
 export const socialLinks = [
@@ -23,6 +27,7 @@ export const socialLinks = [
   //   url: 'https://www.instagram.com/tosif_shahbax',
   //   icon: 'insta',
   // },
+  
   {
     label: 'Figma',
     url: 'https://www.linkedin.com/in/touseef-shahbaz-f212200/',
