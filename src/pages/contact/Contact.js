@@ -12,6 +12,7 @@ import { tokens } from 'components/ThemeProvider/theme';
 import { Transition } from 'components/Transition';
 import { useFormInput } from 'hooks';
 import { useRef, useState } from 'react';
+import emailjs from '@emailjs/browser';
 import { cssProps, msToNum, numToMs } from 'utils/style';
 import styles from './Contact.module.css';
 
@@ -34,21 +35,46 @@ export const Contact = () => {
       setSending(true);
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
-      const response = await fetch(`${apiUrl}/message`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.value,
-          message: message.value,
-        }),
-      });
+      let apiError;
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        const errorMessage = errorData?.error || response.statusText || 'Failed to send message';
-        throw new Error(errorMessage);
+      try {
+        const response = await fetch(`${apiUrl}/message`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.value,
+            message: message.value,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          const errorMessage = errorData?.error || response.statusText || 'Failed to send message';
+          throw new Error(errorMessage);
+        }
+      } catch (error) {
+        apiError = error;
+      }
+
+      if (apiError) {
+        console.warn('Local API failed, falling back to EmailJS:', apiError.message);
+
+        const emailJsResponse = await emailjs.send(
+          'service_b2dmj5t',
+          'template_u62diup',
+          {
+            email: email.value,
+            message: message.value,
+            title: 'Portfolio Contact Form',
+          },
+          'KVi8kSOugSdOnI967'
+        );
+
+        if (emailJsResponse.status !== 200) {
+          throw new Error(emailJsResponse.text || 'Failed to send message');
+        }
       }
 
       setComplete(true);
