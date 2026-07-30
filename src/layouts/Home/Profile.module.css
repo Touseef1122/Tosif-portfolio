@@ -130,19 +130,6 @@
 }
 
 .bulletList {
-  margin: 0;
-  padding-left: var(--spaceL);
-  list-style: disc inside;
-  display: grid;
-  gap: calc(var(--spaceS) / 2);
-  margin-bottom: var(--spaceXL);
-}
-
-.bulletList li {
-  margin-bottom: 0;
-}
-
-.tag {
   /* margin-top: 120px; */
   margin-bottom: var(--spaceXL);
   display: grid;

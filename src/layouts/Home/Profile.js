@@ -111,15 +111,15 @@ export const Profile = ({ id, visible, sectionRef }) => {
                 • Collaborate effectively in agile and team-driven development environments<br />
                 • Utilize modern development tools and AI-assisted workflows to improve productivity, code quality, and consistency
               </Text>
-                <Button
-                  secondary
-                  className={styles.button}
-                  data-visible={visible}
-                  href="/contact"
-                  icon="send"
-                >
-                  Send me a message
-                </Button>
+              <Button
+                secondary
+                className={styles.button}
+                data-visible={visible}
+                href="/contact"
+                icon="send"
+              >
+                Send me a message
+              </Button>
             </div>
           </div>
           
