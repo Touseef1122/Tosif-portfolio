@@ -11,10 +11,7 @@ import { Text } from 'components/Text';
 import { tokens } from 'components/ThemeProvider/theme';
 import { Transition } from 'components/Transition';
 import { useFormInput } from 'hooks';
-import { useRef, useState, useEffect } from 'react';
-import emailjs from '@emailjs/browser';
-// Initialize EmailJS with the public user ID so fallback works reliably
-emailjs.init('KVi8kSOugSdOnI967');
+import { useRef, useState } from 'react';
 import { cssProps, msToNum, numToMs } from 'utils/style';
 import styles from './Contact.module.css';
 
@@ -27,84 +24,25 @@ export const Contact = () => {
   const [statusError, setStatusError] = useState('');
   const initDelay = tokens.base.durationS;
 
-  const onSubmit = async event => {
+  const onSubmit = event => {
     event.preventDefault();
     setStatusError('');
 
     if (sending) return;
 
-    try {
-      setSending(true);
-
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
-      let apiError;
-
-      try {
-        const response = await fetch(`${apiUrl}/message`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email.value,
-            message: message.value,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => null);
-          const errorMessage = errorData?.error || response.statusText || 'Failed to send message';
-          throw new Error(errorMessage);
-        }
-      } catch (error) {
-        apiError = error;
-      }
-
-      if (apiError) {
-        console.warn('Local API failed, falling back to EmailJS:', apiError.message);
-
-        try {
-          const emailJsResponse = await emailjs.send(
-            'service_b2dmj5t',
-            'template_u62diup',
-            {
-              email: email.value,
-              message: message.value,
-              title: 'Portfolio Contact Form',
-            }
-          );
-
-          if (emailJsResponse?.status !== 200) {
-            throw new Error(emailJsResponse?.text || `EmailJS returned status ${emailJsResponse?.status}`);
-          }
-        } catch (e) {
-          console.error('EmailJS fallback failed:', e);
-          // Provide an actionable error for common EmailJS 412 issues
-          const helpMessage = e?.text || e?.message || '';
-          const hint = 'Check EmailJS service/template/user IDs and allowed origins in your EmailJS dashboard.';
-          throw new Error(`${helpMessage || 'EmailJS failed'} — ${hint}`);
-        }
-      }
-
-      setComplete(true);
-      setSending(false);
-    } catch (error) {
-      setSending(false);
-      const raw = error?.message || '';
-
-      // Friendly, actionable messages for common failures
-      if (raw.includes('Email service not configured')) {
-        setStatusError(
-          'Server email is not configured. Message sent using EmailJS fallback. To enable server email, add GMAIL_USER and GMAIL_APP_PASSWORD (app password) to your deployment environment variables and redeploy.'
-        );
-      } else if (raw.toLowerCase().includes('emailjs')) {
-        setStatusError(
-          'EmailJS fallback failed. Check EmailJS service/template/user IDs and allowed origins in the EmailJS dashboard.'
-        );
-      } else {
-        setStatusError(raw || 'There was a problem sending your message');
-      }
+    if (!email.value || !message.value) {
+      setStatusError('Please enter both email and message to send an email.');
+      return;
     }
+
+    const subject = encodeURIComponent('Contact from portfolio');
+    const body = encodeURIComponent(`From: ${email.value}\n\n${message.value}`);
+    const mailto = `mailto:tosif.shahbax@gmail.com?subject=${subject}&body=${body}`;
+
+    setSending(true);
+    window.location.href = mailto;
+    setComplete(true);
+    setSending(false);
   };
 
   return (
@@ -173,11 +111,7 @@ export const Contact = () => {
             <Button
               className={styles.button}
               data-status={status}
-              data-sending={sending}
               style={getDelay(tokens.base.durationM, initDelay)}
-              disabled={sending}
-              loading={sending}
-              loadingText="Sending..."
               icon="send"
               type="submit"
             >
