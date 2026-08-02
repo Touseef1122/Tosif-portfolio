@@ -11,8 +11,10 @@ import { Text } from 'components/Text';
 import { tokens } from 'components/ThemeProvider/theme';
 import { Transition } from 'components/Transition';
 import { useFormInput } from 'hooks';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
+// Initialize EmailJS with the public user ID so fallback works reliably
+emailjs.init('KVi8kSOugSdOnI967');
 import { cssProps, msToNum, numToMs } from 'utils/style';
 import styles from './Contact.module.css';
 
@@ -61,19 +63,26 @@ export const Contact = () => {
       if (apiError) {
         console.warn('Local API failed, falling back to EmailJS:', apiError.message);
 
-        const emailJsResponse = await emailjs.send(
-          'service_b2dmj5t',
-          'template_u62diup',
-          {
-            email: email.value,
-            message: message.value,
-            title: 'Portfolio Contact Form',
-          },
-          'KVi8kSOugSdOnI967'
-        );
+        try {
+          const emailJsResponse = await emailjs.send(
+            'service_b2dmj5t',
+            'template_u62diup',
+            {
+              email: email.value,
+              message: message.value,
+              title: 'Portfolio Contact Form',
+            }
+          );
 
-        if (emailJsResponse.status !== 200) {
-          throw new Error(emailJsResponse.text || 'Failed to send message');
+          if (emailJsResponse?.status !== 200) {
+            throw new Error(emailJsResponse?.text || `EmailJS returned status ${emailJsResponse?.status}`);
+          }
+        } catch (e) {
+          console.error('EmailJS fallback failed:', e);
+          // Provide an actionable error for common EmailJS 412 issues
+          const helpMessage = e?.text || e?.message || '';
+          const hint = 'Check EmailJS service/template/user IDs and allowed origins in your EmailJS dashboard.';
+          throw new Error(`${helpMessage || 'EmailJS failed'} — ${hint}`);
         }
       }
 
@@ -81,7 +90,20 @@ export const Contact = () => {
       setSending(false);
     } catch (error) {
       setSending(false);
-      setStatusError(error.message);
+      const raw = error?.message || '';
+
+      // Friendly, actionable messages for common failures
+      if (raw.includes('Email service not configured')) {
+        setStatusError(
+          'Server email is not configured. Message sent using EmailJS fallback. To enable server email, add GMAIL_USER and GMAIL_APP_PASSWORD (app password) to your deployment environment variables and redeploy.'
+        );
+      } else if (raw.toLowerCase().includes('emailjs')) {
+        setStatusError(
+          'EmailJS fallback failed. Check EmailJS service/template/user IDs and allowed origins in the EmailJS dashboard.'
+        );
+      } else {
+        setStatusError(raw || 'There was a problem sending your message');
+      }
     }
   };
 
