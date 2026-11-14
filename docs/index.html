@@ -15,26 +15,26 @@
 <style>
   /* ───────── TOKENS · pastel white · blush pink · gold ───────── */
   :root{
-    --out:#f7e3e8;
-    --bg-a:#fff8f9; --bg-b:#fbe6eb; --bg-c:#f9ecdf;
-    --panel:#fffcfc;
-    --ink:#5c4149; --ink2:#775a62;
-    --rose:#e48fa1; --rose-d:#c4677d; --rose-l:#f8d6dd;
-    --gold:#cca24f; --gold-l:#f0dcaa; --gold-d:#86651f;
-    --leaf:#e9cf9e;
-    --sk1:#f8dfe5; --sk2:#f1ccd5; --win:#f3d58a;
-    --shadow:rgba(196,103,125,.2);
-    --line:rgba(204,162,79,.5);
-    color-scheme:light;
+    --out:#20161d;
+    --bg-a:#2c1d24; --bg-b:#3a2430; --bg-c:#2b1d1c;
+    --panel:#36262d;
+    --ink:#f6e5df; --ink2:#efc9d4;
+    --rose:#ef9fb2; --rose-d:#d68096; --rose-l:#f8dfe4;
+    --gold:#d7b364; --gold-l:#efd7a4; --gold-d:#b88a32;
+    --leaf:#e7c889;
+    --sk1:#4a2c38; --sk2:#5f3a45; --win:#f3d58a;
+    --shadow:rgba(6,2,3,.42);
+    --line:rgba(216,182,100,.5);
+    color-scheme:dark;
     box-sizing:border-box;
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
   }
-  /* light pastel palette is always used, even when the phone is in dark mode */
+  /* deep rose-gold palette keeps the same romantic theme with a darker mood */
   
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth;scroll-snap-type:y proximity;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
-  body{background:var(--out);color:var(--ink);font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  body{background:radial-gradient(circle at top, rgba(255,255,255,.05), transparent 32%), var(--out);color:var(--ink);font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
   html.js body.locked{overflow:hidden;height:100%}
   svg{display:block}
   button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -534,7 +534,6 @@
  
     <svg class="moon rv" style="--d:.1s;margin-top:clamp(6px,2svh,22px)" viewBox="0 0 120 90" aria-hidden="true"><use href="#crescent"/></svg>
     <div class="bism ar gold rv" style="--d:.3s" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-    <div class="bism-en rv" style="--d:.4s">Bismillah hir Rahman nir Raheem</div>
  
     <div class="kicker rv" style="--d:.6s">Nikah Ceremony</div>
  
@@ -877,8 +876,12 @@
       setSound(true); return;
     }
     if (!ctx && !setup()) return;
-    drone();
-    ctx.resume();
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(function () {});
+    }
+    if (!droneOn) {
+      drone();
+    }
     nextT = ctx.currentTime + .6;
     clearInterval(timer); timer = setInterval(schedule, 350);
     fade(.9, 3);
@@ -908,7 +911,7 @@
     for (var j = 0; j < els.length; j++) io.observe(els[j]);
   }
 
-  openBtn.addEventListener('click', function () {
+  function beginInvitation() {
     gate.classList.add('open');
     body.classList.remove('locked');
     body.classList.add('go');
@@ -916,8 +919,12 @@
     startMusic();
     setTimeout(reveal, 600);
     setTimeout(function () { gate.hidden = true; }, 2100);
-  });
+  }
+
+  openBtn.addEventListener('click', beginInvitation);
+  openBtn.addEventListener('pointerdown', beginInvitation, { passive: true });
   snd.addEventListener('click', function () { on ? stopMusic() : startMusic(); });
+  snd.addEventListener('pointerdown', function (event) { event.preventDefault(); on ? stopMusic() : startMusic(); }, { passive: false });
   hint.addEventListener('click', function () {
     var t = d.getElementById('ayah');
     if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
