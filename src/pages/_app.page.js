@@ -25,6 +25,7 @@ const App = ({ Component, pageProps }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { route, events, asPath } = useRouter();
   const canonicalRoute = route === '/' ? '' : `${asPath}`;
+  const isStandaloneCardRoute = route === '/card' || route.startsWith('/card/');
   useFoucFix();
 
   // Handle analytics pageview recording
@@ -55,6 +56,20 @@ const App = ({ Component, pageProps }) => {
   useEffect(() => {
     dispatch({ type: 'setTheme', value: storedTheme || 'dark' });
   }, [storedTheme]);
+
+  if (isStandaloneCardRoute) {
+    return (
+      <>
+        <Head>
+          <link
+            rel="canonical"
+            href={`${process.env.NEXT_PUBLIC_WEBSITE_URL}${canonicalRoute}`}
+          />
+        </Head>
+        <Component {...pageProps} />
+      </>
+    );
+  }
 
   return (
     <AppContext.Provider value={{ ...state, dispatch }}>
