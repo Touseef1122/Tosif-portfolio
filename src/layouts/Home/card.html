@@ -219,10 +219,17 @@
   .js .cpl.in .gr,.js .cpl.in .bd{opacity:1;transform:none}
   .js .cpl .hearts,.js .cpl .clasp{opacity:0;transform:scale(.72);transition:opacity 1s ease 2.4s,transform 1s ease 2.4s}
   .js .cpl.in .hearts,.js .cpl.in .clasp{opacity:1;transform:none}
-  .gr-in{transform-box:fill-box;transform-origin:50% 100%;animation:leanR 5s ease-in-out infinite alternate}
-  .bd-in{transform-box:fill-box;transform-origin:50% 100%;animation:leanL 5s ease-in-out infinite alternate}
-  @keyframes leanR{from{transform:rotate(-.6deg)}to{transform:rotate(1.4deg)}}
-  @keyframes leanL{from{transform:rotate(.6deg)}to{transform:rotate(-1.4deg)}}
+  .gr-sticker,.bd-sticker{transform-box:fill-box;transform-origin:50% 100%;filter:drop-shadow(0 8px 8px rgba(181,121,135,.12))}
+  .gr-sticker{animation:groomSticker 2.7s ease-in-out infinite alternate}
+  .bd-sticker{animation:brideSticker 2.9s ease-in-out infinite alternate}
+  .gr-sticker .body-sway,.bd-sticker .body-sway{transform-box:fill-box;transform-origin:50% 100%;animation:poseBreathe 3.3s ease-in-out infinite alternate}
+  @keyframes groomSticker{0%{transform:translateY(0) rotate(-1.7deg) scale(1)}50%{transform:translateY(-5px) rotate(1.5deg) scale(1.02)}100%{transform:translateY(0) rotate(-.8deg) scale(1)}}
+  @keyframes brideSticker{0%{transform:translateY(0) rotate(1.7deg) scale(1)}50%{transform:translateY(-6px) rotate(-1.4deg) scale(1.025)}100%{transform:translateY(0) rotate(.9deg) scale(1)}}
+  @keyframes poseBreathe{0%{transform:translateY(0) scaleY(1)}50%{transform:translateY(-2px) scaleY(1.02)}100%{transform:translateY(0) scaleY(1)}}
+  .hero-scene .clasp{animation:claspPop 2.8s ease-in-out infinite}
+  .hero-scene .hearts path{animation:heartPop 3.2s ease-in-out infinite}
+  @keyframes claspPop{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.18);opacity:1}}
+  @keyframes heartPop{0%,100%{transform:scale(.8);opacity:.6}50%{transform:scale(1.15);opacity:1}}
   .dupatta{transform-box:view-box;transform-origin:170px 44px;animation:flutter 3.6s ease-in-out infinite alternate}
   @keyframes flutter{from{transform:rotate(-1.5deg) skewX(0deg)}to{transform:rotate(2.5deg) skewX(-3deg)}}
   .flare{transform-box:fill-box;transform-origin:50% 100%;animation:flare 3.6s ease-in-out infinite alternate}
@@ -580,32 +587,36 @@
             <circle cx="170" cy="94" r="8"/>
           </g>
         </g>
-        <g class="gr">
-          <ellipse cx="128" cy="182" rx="26" ry="12" fill="rgba(125,95,99,.12)"/>
-          <path d="M98 174h60l6 42h-72z" fill="#f2f4f9"/>
-          <path d="M112 104c0-18 12-30 26-30s26 12 26 30v18h-52z" fill="#f1d3d7"/>
-          <path d="M112 132h52v26h-52z" fill="#f5d4a7"/>
-          <path d="M108 144l-16 40h24l12-28z" fill="#d2a96a"/>
-          <path d="M156 144l16 40h-24l-12-28z" fill="#d2a96a"/>
-          <path d="M116 116l8-16h20l8 16v18h-36z" fill="#f7e7d0"/>
-          <path d="M120 170l-12 28h24l-8-28z" fill="#d7b168"/>
-          <path d="M145 170l12 28h-24l8-28z" fill="#d7b168"/>
-          <path d="M125 104h16v10h-16z" fill="#d69696"/>
-          <circle cx="136" cy="100" r="8" fill="#f2d2bb"/>
+        <g class="gr gr-sticker">
+          <g class="body-sway">
+            <ellipse cx="128" cy="182" rx="26" ry="12" fill="rgba(125,95,99,.12)"/>
+            <path d="M98 174h60l6 42h-72z" fill="#f2f4f9"/>
+            <path d="M112 104c0-18 12-30 26-30s26 12 26 30v18h-52z" fill="#f1d3d7"/>
+            <path d="M112 132h52v26h-52z" fill="#f5d4a7"/>
+            <path d="M108 144l-16 40h24l12-28z" fill="#d2a96a"/>
+            <path d="M156 144l16 40h-24l-12-28z" fill="#d2a96a"/>
+            <path d="M116 116l8-16h20l8 16v18h-36z" fill="#f7e7d0"/>
+            <path d="M120 170l-12 28h24l-8-28z" fill="#d7b168"/>
+            <path d="M145 170l12 28h-24l8-28z" fill="#d7b168"/>
+            <path d="M125 104h16v10h-16z" fill="#d69696"/>
+            <circle cx="136" cy="100" r="8" fill="#f2d2bb"/>
+          </g>
         </g>
-        <g class="bd">
-          <ellipse cx="212" cy="182" rx="26" ry="12" fill="rgba(125,95,99,.12)"/>
-          <path d="M176 172h72l8 44h-88z" fill="#f9f5f3"/>
-          <path d="M192 100c0-18 12-30 28-30s28 12 28 30v22h-56z" fill="#f7dfe4"/>
-          <path d="M182 126h60v28h-60z" fill="#f7ecdb"/>
-          <path d="M180 134l-18 40h28l12-26z" fill="#f4d1d9"/>
-          <path d="M248 134l18 40h-28l-12-26z" fill="#f4d1d9"/>
-          <path d="M196 112l8-16h22l8 16v20h-38z" fill="#f9e9d5"/>
-          <path d="M208 174l-10 28h22l-10-28z" fill="#f0c6d0"/>
-          <path d="M224 174l10 28h-22l10-28z" fill="#f0c6d0"/>
-          <path d="M213 108c2 8 4 14 7 20 3-6 5-12 7-20h-14z" fill="#d89fa7"/>
-          <circle cx="213" cy="98" r="8" fill="#f2d2bb"/>
-          <path d="M201 98c8-15 26-16 34 0" fill="none" stroke="#d39ca6" stroke-width="2" stroke-linecap="round"/>
+        <g class="bd bd-sticker">
+          <g class="body-sway">
+            <ellipse cx="212" cy="182" rx="26" ry="12" fill="rgba(125,95,99,.12)"/>
+            <path d="M176 172h72l8 44h-88z" fill="#f9f5f3"/>
+            <path d="M192 100c0-18 12-30 28-30s28 12 28 30v22h-56z" fill="#f7dfe4"/>
+            <path d="M182 126h60v28h-60z" fill="#f7ecdb"/>
+            <path d="M180 134l-18 40h28l12-26z" fill="#f4d1d9"/>
+            <path d="M248 134l18 40h-28l-12-26z" fill="#f4d1d9"/>
+            <path d="M196 112l8-16h22l8 16v20h-38z" fill="#f9e9d5"/>
+            <path d="M208 174l-10 28h22l-10-28z" fill="#f0c6d0"/>
+            <path d="M224 174l10 28h-22l10-28z" fill="#f0c6d0"/>
+            <path d="M213 108c2 8 4 14 7 20 3-6 5-12 7-20h-14z" fill="#d89fa7"/>
+            <circle cx="213" cy="98" r="8" fill="#f2d2bb"/>
+            <path d="M201 98c8-15 26-16 34 0" fill="none" stroke="#d39ca6" stroke-width="2" stroke-linecap="round"/>
+          </g>
         </g>
         <g class="clasp">
           <circle cx="170" cy="142" r="11" fill="var(--gold)" opacity=".9"/>
