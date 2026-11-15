@@ -506,7 +506,7 @@
  
 <!-- music toggle -->
 <div class="music-shell" aria-hidden="true">
-  <iframe id="musicFrame" title="Background music" allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="175" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;position:fixed;left:-9999px;bottom:-9999px;opacity:0;pointer-events:none;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src=""></iframe>
+  <audio id="bgMusic" preload="auto" loop playsinline crossorigin="anonymous" aria-hidden="true"></audio>
 </div>
 <button class="sound" id="sound" type="button" aria-label="Toggle background music" aria-pressed="false"><i></i><i></i><i></i><i></i></button>
  
@@ -809,8 +809,8 @@
   var d = document, body = d.body;
   var gate = d.getElementById('gate'), openBtn = d.getElementById('open');
   var snd = d.getElementById('sound'), hint = d.getElementById('scrollHint');
-  var musicFrame = d.getElementById('musicFrame');
-  var MUSIC_SRC = 'https://embed.music.apple.com/us/song/aamani-ruthuve-instrumental/1545576765';
+  var bgMusic = d.getElementById('bgMusic');
+  var MUSIC_SRC = ''; // set to a licensed direct file URL when available, e.g. /audio/aamani-ruthuve.mp3
 
   var ctx, bus, master, timer, nextT = 0, pi = 0, ni = 0, on = false, au = null, droneOn = false;
 
@@ -879,10 +879,13 @@
     if (done) setTimeout(done, secs * 1000 + 60);
   }
   function startMusic() {
-    if (musicFrame && MUSIC_SRC) {
-      if (!musicFrame.src || musicFrame.src.indexOf('aamani-ruthuve-instrumental') === -1) {
-        musicFrame.src = MUSIC_SRC;
+    if (bgMusic && MUSIC_SRC) {
+      if (!bgMusic.src || bgMusic.src !== MUSIC_SRC) {
+        bgMusic.src = MUSIC_SRC;
       }
+      bgMusic.volume = 0.8;
+      bgMusic.muted = false;
+      bgMusic.play().catch(function () {});
       setSound(true);
       return;
     }
@@ -899,8 +902,9 @@
     setSound(true);
   }
   function stopMusic() {
-    if (musicFrame) {
-      musicFrame.src = '';
+    if (bgMusic) {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
       setSound(false);
       return;
     }
