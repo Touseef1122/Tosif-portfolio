@@ -811,6 +811,7 @@
   var gate = d.getElementById('gate'), openBtn = d.getElementById('open');
   var snd = d.getElementById('sound'), hint = d.getElementById('scrollHint');
   var bgMusic = d.getElementById('bgMusic');
+  var MUSIC_SRC = ''; // replace with a licensed direct MP3/M4A URL when you have the final file
 
   var ctx, bus, master, timer, nextT = 0, pi = 0, ni = 0, on = false, au = null, droneOn = false;
 
@@ -879,6 +880,15 @@
     if (done) setTimeout(done, secs * 1000 + 60);
   }
   function startMusic() {
+    if (bgMusic && MUSIC_SRC) {
+      if (!bgMusic.src || bgMusic.src !== MUSIC_SRC) {
+        bgMusic.src = MUSIC_SRC;
+      }
+      bgMusic.volume = 0.82;
+      bgMusic.play().catch(function () {});
+      setSound(true);
+      return;
+    }
     if (!ctx && !setup()) return;
     if (ctx.state === 'suspended') {
       ctx.resume().catch(function () {});
@@ -892,6 +902,12 @@
     setSound(true);
   }
   function stopMusic() {
+    if (bgMusic) {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+      setSound(false);
+      return;
+    }
     if (au) { au.pause(); setSound(false); return; }
     if (!ctx) return;
     fade(0, .9, function () { if (!on) { clearInterval(timer); ctx.suspend(); } });
