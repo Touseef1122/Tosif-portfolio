@@ -737,12 +737,25 @@
   }
   function startMusic() {
     if (bgMusic && MUSIC_SRC) {
-      if (!bgMusic.src || bgMusic.src !== MUSIC_SRC) {
+      var musicUrl = new URL(MUSIC_SRC, window.location.href).toString();
+      if (!bgMusic.src || !bgMusic.src.endsWith('/audio/Aamani-Ruthuve-(Instrumental).mp3')) {
         bgMusic.src = MUSIC_SRC;
+        bgMusic.load();
       }
       bgMusic.volume = 0.8;
       bgMusic.muted = false;
-      bgMusic.play().catch(function () {});
+      var playPromise = bgMusic.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(function () {
+          var resumeAudio = function () {
+            bgMusic.src = MUSIC_SRC;
+            bgMusic.load();
+            bgMusic.play().catch(function () {});
+            document.body.removeEventListener('pointerdown', resumeAudio);
+          };
+          document.body.addEventListener('pointerdown', resumeAudio, { once: true });
+        });
+      }
       setSound(true);
       return;
     }
