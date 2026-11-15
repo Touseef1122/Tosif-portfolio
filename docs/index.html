@@ -668,6 +668,10 @@
   var snd = d.getElementById('sound'), hint = d.getElementById('scrollHint');
   var bgMusic = d.getElementById('bgMusic');
   var MUSIC_SRC = './audio/Aamani-Ruthuve-(Instrumental).mp3';
+  var dateEls = d.querySelectorAll('.ur-thanks');
+  for (var i = 0; i < dateEls.length; i++) {
+    dateEls[i].textContent = '20-November-2026';
+  }
 
   var ctx, bus, master, timer, nextT = 0, pi = 0, ni = 0, on = false, au = null, droneOn = false;
 
