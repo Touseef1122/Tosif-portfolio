@@ -506,7 +506,7 @@
  
 <!-- music toggle -->
 <div class="music-shell" aria-hidden="true">
-  <iframe id="musicFrame" title="Background music" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen="false" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <audio id="bgMusic" preload="auto" loop playsinline aria-hidden="true"></audio>
 </div>
 <button class="sound" id="sound" type="button" aria-label="Toggle background music" aria-pressed="false"><i></i><i></i><i></i><i></i></button>
  
@@ -810,11 +810,7 @@
   var d = document, body = d.body;
   var gate = d.getElementById('gate'), openBtn = d.getElementById('open');
   var snd = d.getElementById('sound'), hint = d.getElementById('scrollHint');
-  var musicFrame = d.getElementById('musicFrame');
-
-  // Requested instrumental track: Aamani Ruthuve (Instrumental) by A.R. Rahman.
-  // Embedded video is used to stay mobile-safe because autoplay is blocked before a user gesture.
-  var MUSIC_URL = 'https://www.youtube-nocookie.com/embed/_d4C8bAVlxo?autoplay=1&controls=0&rel=0&modestbranding=1&loop=1&playlist=_d4C8bAVlxo&playsinline=1';
+  var bgMusic = d.getElementById('bgMusic');
 
   var ctx, bus, master, timer, nextT = 0, pi = 0, ni = 0, on = false, au = null, droneOn = false;
 
@@ -883,18 +879,6 @@
     if (done) setTimeout(done, secs * 1000 + 60);
   }
   function startMusic() {
-    if (musicFrame && MUSIC_URL) {
-      if (!musicFrame.src || musicFrame.src.indexOf('_d4C8bAVlxo') === -1) {
-        musicFrame.src = MUSIC_URL;
-      }
-      if (musicFrame.contentWindow && typeof musicFrame.contentWindow.postMessage === 'function') {
-        try {
-          musicFrame.contentWindow.postMessage('{"event":"command","func":"playVideo","args":[]}', '*');
-        } catch (err) {}
-      }
-      setSound(true);
-      return;
-    }
     if (!ctx && !setup()) return;
     if (ctx.state === 'suspended') {
       ctx.resume().catch(function () {});
@@ -908,13 +892,6 @@
     setSound(true);
   }
   function stopMusic() {
-    if (musicFrame) {
-      try {
-        musicFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":[]}', '*');
-      } catch (err) {}
-      setSound(false);
-      return;
-    }
     if (au) { au.pause(); setSound(false); return; }
     if (!ctx) return;
     fade(0, .9, function () { if (!on) { clearInterval(timer); ctx.suspend(); } });
